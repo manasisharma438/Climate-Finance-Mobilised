@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Climate Finance to India and Its Peers — A Data Brief</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root{
+    --ink:#1a2e28;
+    --ink-soft:#52615b;
+    --ink-faint:#8a958f;
+    --paper:#f6f4ee;
+    --card:#ffffff;
+    --line:#e2ddd2;
+    --accent:#0f6e56;      /* deep teal — public finance */
+    --accent2:#ba7517;     /* ochre — India highlight */
+    --accent3:#7f77dd;     /* violet — private finance */
+    --warn:#b4451f;
+    --maxw:860px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    line-height:1.65;font-size:18px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  header{padding:72px 0 36px;border-bottom:2px solid var(--ink)}
+  .eyebrow{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin:0 0 18px;
+  }
+  h1{
+    font-size:clamp(34px,5.5vw,52px);line-height:1.08;margin:0 0 20px;
+    font-weight:600;letter-spacing:-.01em;
+  }
+  .standfirst{font-size:21px;color:var(--ink-soft);margin:0;max-width:640px}
+  .meta{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:12px;color:var(--ink-faint);margin-top:28px;letter-spacing:.03em;
+  }
+  h2{
+    font-size:28px;font-weight:600;margin:64px 0 6px;letter-spacing:-.01em;
+    padding-top:18px;
+  }
+  .section-num{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:12px;letter-spacing:.16em;color:var(--accent2);
+    text-transform:uppercase;font-weight:600;display:block;margin-top:56px;
+  }
+  h2 + p{margin-top:14px}
+  p{margin:18px 0}
+  strong{font-weight:600;color:var(--ink)}
+  .lead-in{color:var(--ink-soft)}
+  figure{margin:36px 0;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:22px 22px 18px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+  figcaption{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:12px;color:var(--ink-faint);margin-top:14px;line-height:1.5;
+    letter-spacing:.01em;
+  }
+  .fig-title{font-size:16px;font-weight:600;margin:0 0 4px;font-family:inherit;letter-spacing:0}
+  .fig-sub{font-size:14px;color:var(--ink-soft);margin:0 0 16px;font-family:inherit}
+  .chart-box{position:relative;width:100%}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:0 0 14px;
+    font-family:system-ui,sans-serif;font-size:12.5px;color:var(--ink-soft)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:11px;height:11px;border-radius:3px;flex:none}
+  .takeaways{background:#eef3f0;border:1px solid #d6e2db;border-radius:14px;
+    padding:24px 26px;margin:30px 0}
+  .takeaways h3{margin:0 0 6px;font-size:17px;font-weight:600;
+    font-family:ui-monospace,monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+  .takeaways ul{margin:12px 0 0;padding-left:0;list-style:none}
+  .takeaways li{position:relative;padding-left:30px;margin:14px 0;font-size:17px;line-height:1.55}
+  .takeaways li::before{content:"→";position:absolute;left:0;top:0;color:var(--accent);font-weight:700}
+  .pill{display:inline-block;background:#fbe5cd;color:#7a4d09;font-size:13px;
+    font-family:system-ui,sans-serif;padding:2px 9px;border-radius:20px;font-weight:600;
+    vertical-align:middle}
+  table.mini{width:100%;border-collapse:collapse;margin:22px 0;font-size:15px;
+    font-family:system-ui,sans-serif}
+  table.mini th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink-faint);font-weight:600;padding:8px 10px;border-bottom:2px solid var(--line)}
+  table.mini td{padding:9px 10px;border-bottom:1px solid var(--line)}
+  table.mini td.num{text-align:right;font-variant-numeric:tabular-nums}
+  table.mini tr.hi td{background:#fdf4e3}
+  .caveat{font-size:15px;color:var(--ink-soft);border-left:3px solid var(--accent2);
+    padding:6px 0 6px 18px;margin:26px 0;background:transparent}
+  footer{margin:80px 0 60px;padding-top:28px;border-top:2px solid var(--ink);
+    font-family:ui-monospace,monospace;font-size:12.5px;color:var(--ink-faint);line-height:1.7}
+  footer a{color:var(--accent)}
+  .divider-note{font-family:system-ui,sans-serif;font-size:13px;color:var(--ink-faint);
+    text-align:center;margin:8px 0}
+  @media (max-width:620px){
+    body{font-size:17px}
+    header{padding:48px 0 28px}
+    .standfirst{font-size:18px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Data brief · OECD climate finance</p>
+  <h1>Where climate money flows — India and six peers</h1>
+  <p class="standfirst">A working summary of public climate aid and privately mobilised climate finance across seven large, climate-exposed developing economies, 2015–2024. Built to surface trends, not to settle them.</p>
+  <p class="meta">Peers: India · China · Brazil · Indonesia · Bangladesh · Pakistan · Viet Nam &nbsp;|&nbsp; Source: OECD DAC (Rio Markers; CRS private mobilisation)</p>
+</header>
+
+<span class="section-num">Why these seven</span>
+<h2>The comparison set</h2>
+<p>India is hard to benchmark: it is a <strong>lower-middle-income</strong> country by GNI per capita, yet carries the economy, emissions, and negotiating weight of an upper-middle-income G20 power. So peers were chosen on two axes at once — economic scale and political grouping (the G20 / BASIC bloc: China, Brazil, Indonesia, South Africa) and climate vulnerability and need (Bangladesh, Pakistan, Viet Nam, Indonesia). The seven that carry through the finance data are India, China, Brazil, Indonesia, Bangladesh, Pakistan and Viet Nam.</p>
+<p class="lead-in">Vulnerability framing matters because it sets up the central tension in the finance numbers. Across three independent indices, India is an outlier on physical risk relative to its income peers:</p>
+
+<table class="mini">
+  <thead><tr><th>Country</th><th>CRI rank (1995–2024)</th><th>ND-GAIN (0–100)</th><th>WorldRiskIndex 2025</th></tr></thead>
+  <tbody>
+    <tr class="hi"><td>India</td><td class="num">#9</td><td class="num">45.5</td><td class="num">41.5 &nbsp;(#2)</td></tr>
+    <tr><td>Bangladesh</td><td class="num">#7</td><td class="num">40.2</td><td class="num">27.3</td></tr>
+    <tr><td>Philippines / Pakistan*</td><td class="num">#2 / #5</td><td class="num">43.5 / 38.0</td><td class="num">46.6 / 26.4</td></tr>
+    <tr><td>Indonesia</td><td class="num">#37</td><td class="num">48.4</td><td class="num">43.5</td></tr>
+    <tr><td>Brazil</td><td class="num">#23</td><td class="num">49.1</td><td class="num">13.5</td></tr>
+    <tr><td>China</td><td class="num">#12</td><td class="num">58.7</td><td class="num">27.1</td></tr>
+  </tbody>
+</table>
+<p class="caveat">CRI = realized losses from extreme weather (lower rank = more affected). ND-GAIN = vulnerability + readiness (higher = better prepared). WorldRiskIndex = hazard exposure × coping capacity (higher = higher risk). *Philippines shown as a vulnerability reference point. The takeaway: Brazil and China face far lower physical risk than India, while Bangladesh, Pakistan and the Philippines are India's true vulnerability peers.</p>
+
+<span class="section-num">Part one · Public money</span>
+<h2>Climate aid committed by DAC donors</h2>
+<p>The first dataset is <strong>public ODA committed</strong> to climate, tagged through the OECD's Rio Markers, in constant 2024 dollars. India dominates this picture — it alone accounts for roughly <strong>42% of all climate finance</strong> committed to the seven, driven overwhelmingly by mitigation.</p>
+
+<figure>
+  <p class="fig-title">Total environmental ODA committed, 2015–2024</p>
+  <p class="fig-sub">USD billions · Principal + Significant · by Rio marker</p>
+  <div class="legend">
+    <span><span class="dot" style="background:#ba7517"></span>Climate mitigation</span>
+    <span><span class="dot" style="background:#0f6e56"></span>Climate adaptation</span>
+    <span><span class="dot" style="background:#7f77dd"></span>Biodiversity</span>
+    <span><span class="dot" style="background:#d85a30"></span>Desertification</span>
+  </div>
+  <div class="chart-box" style="height:380px"><canvas id="c1"></canvas></div>
+  <figcaption>India's bar is roughly the next three countries combined. Mitigation (ochre) is the dominant slice for India; adaptation is proportionally larger for Pakistan and Indonesia. Markers overlap, so slices are not strictly additive.</figcaption>
+</figure>
+
+<p>The <strong>balance between mitigation and adaptation</strong> is where the structural story sits. Donors fund India's clean-energy and transport agenda far more than its adaptation needs — a 3.3-to-1 tilt — despite India ranking second globally on physical climate risk. Pakistan is the mirror image: the only peer where adaptation finance exceeds mitigation.</p>
+
+<figure>
+  <p class="fig-title">Mitigation-to-adaptation ratio</p>
+  <p class="fig-sub">Higher = more skewed toward mitigation · 10-year totals</p>
+  <div class="chart-box" style="height:300px"><canvas id="c2"></canvas></div>
+  <figcaption>Above 1.0 means mitigation-heavy. India is the most mitigation-skewed of any peer; Pakistan is the only adaptation-led recipient.</figcaption>
+</figure>
+
+<p>Over time, a clear divergence opened after 2020. The South and Southeast Asian frontline economies saw large increases — India, Bangladesh, Indonesia and Pakistan all rose, with <strong>adaptation finance roughly tripling</strong> for Indonesia and Bangladesh in the back half of the decade. China, Viet Nam and Pakistan's mitigation lines fell. China's decline is the sharpest, reflecting its graduation away from being a DAC aid priority.</p>
+
+<figure>
+  <p class="fig-title">Annual climate finance committed</p>
+  <p class="fig-sub">Mitigation + adaptation · USD billions · hover any line</p>
+  <div class="legend" id="leg3"></div>
+  <div class="chart-box" style="height:360px"><canvas id="c3"></canvas></div>
+  <figcaption>These are commitments, not disbursements — lumpy and timed to project approvals. India's $7.1bn mitigation commitment in 2023 is the single largest point in the data and drove the group peak that year.</figcaption>
+</figure>
+
+<div class="takeaways">
+  <h3>Public finance — what stands out</h3>
+  <ul>
+    <li><strong>India absorbs ~42%</strong> of the group's climate ODA; Bangladesh (19%) and Indonesia (16%) form the second tier.</li>
+    <li><strong>Mitigation crowds out adaptation</strong> for the large economies. India's 3.3:1 tilt is striking given it is the most physically exposed peer.</li>
+    <li><strong>Adaptation is rising fastest</strong> post-2020 across South/SE Asia — tripling for Indonesia and Bangladesh — hinting at a slow correction.</li>
+    <li><strong>China is exiting</strong> the DAC aid frame: climate, biodiversity (−80%) and environment finance all fell sharply.</li>
+    <li><strong>Quality differs:</strong> India and Brazil have the highest "Principal" shares (genuinely climate-purposed projects); adaptation is far more often a side-benefit than a main objective everywhere.</li>
+  </ul>
+</div>
+
+<span class="section-num">Part two · Private money</span>
+<h2>Private finance mobilised by multilaterals</h2>
+<p>The second dataset measures something different: <strong>private capital that multilateral institutions</strong> (World Bank/IFC, ADB and peers) pull into climate projects by de-risking deals. This reorders the league table entirely. On private mobilisation, <span class="pill">Brazil leads</span> — not India — mobilising about 1.7× what India did.</p>
+
+<figure>
+  <p class="fig-title">Private climate finance mobilised by multilaterals</p>
+  <p class="fig-sub">2015–2024 total · USD billions</p>
+  <div class="chart-box" style="height:300px"><canvas id="c4"></canvas></div>
+  <figcaption>Mobilisation tracks bankability, not need. Brazil's liberalised renewables market crowds in private co-investment more readily than India's, and far more than Bangladesh's or Pakistan's.</figcaption>
+</figure>
+
+<p>The <strong>instruments — the "tools"</strong> — reveal each market's maturity. Across all six, mobilisation concentrates in market-based vehicles: direct equity investment in companies and SPVs (45% of the total), syndicated loans (23%), guarantees (13%) and shares in collective investment vehicles (13%). But the mix per country differs sharply.</p>
+
+<figure>
+  <p class="fig-title">How the money is mobilised — by leveraging tool</p>
+  <p class="fig-sub">Multilateral climate mobilisation · USD billions · hover for detail</p>
+  <div class="legend">
+    <span><span class="dot" style="background:#1d9e75"></span>Direct investment (SPVs)</span>
+    <span><span class="dot" style="background:#7f77dd"></span>Syndicated loans</span>
+    <span><span class="dot" style="background:#ba7517"></span>Shares in CIVs</span>
+    <span><span class="dot" style="background:#d85a30"></span>Guarantees</span>
+    <span><span class="dot" style="background:#378add"></span>Co-financing</span>
+    <span><span class="dot" style="background:#b4b2a9"></span>Credit lines</span>
+  </div>
+  <div class="chart-box" style="height:340px"><canvas id="c5"></canvas></div>
+  <figcaption>Brazil runs on direct equity + syndicated loans — the toolkit of a deep market. India leans uniquely on shares in CIVs (pooled green funds, InvITs). Riskier markets (Pakistan, Bangladesh, Viet Nam) show proportionally more guarantees, because private money won't move there without public risk absorption.</figcaption>
+</figure>
+
+<p>The <strong>trend over time</strong> is one of concentration, not democratisation. Brazil's mobilisation exploded (+677% between the two halves of the decade); India more than doubled. But Pakistan collapsed (−61%) and China declined — the gap between bankable and fragile markets is <em>widening</em>.</p>
+
+<figure>
+  <p class="fig-title">Change in multilateral climate mobilisation</p>
+  <p class="fig-sub">2020–2024 total vs 2015–2019 total · % change</p>
+  <div class="chart-box" style="height:300px"><canvas id="c6"></canvas></div>
+  <figcaption>Green = growth, red = decline. The bankable markets pulled away; the fragile ones lost ground. This runs opposite to what climate-vulnerability logic would prescribe.</figcaption>
+</figure>
+
+<div class="takeaways">
+  <h3>Private finance — what stands out</h3>
+  <ul>
+    <li><strong>Brazil, not India, leads private mobilisation</strong> ($17bn vs $10bn). The ODA ranking inverts because private capital chases bankability.</li>
+    <li><strong>The toolkit signals maturity:</strong> deep markets get equity + syndicated loans; fragile markets need guarantees first.</li>
+    <li><strong>India is the CIV outlier</strong> — pooled fund vehicles do its heavy lifting, more than any peer.</li>
+    <li><strong>Multilaterals dominate the channel</strong> — 82–91% of official private mobilisation for Brazil, China and Viet Nam. Bilateral DAC donors are minor by comparison (Pakistan is the lone exception).</li>
+    <li><strong>Concentration is intensifying:</strong> Brazil +677%, India +121%, but Pakistan −61% and China −30%. The most vulnerable mobilise the least.</li>
+  </ul>
+</div>
+
+<span class="section-num">The thesis</span>
+<h2>The gap between need and capital</h2>
+<p>Put the two halves together and a single pattern emerges. <strong>Public climate aid roughly follows scale and, increasingly, need</strong> — India absorbs the most, and adaptation is finally rising for the vulnerable South Asian economies. But <strong>private climate capital flows to where it is safe, not where it is needed.</strong> The countries that scored highest on physical climate risk — Bangladesh, Pakistan, and India on the hazard-exposure measures — are precisely the ones mobilising the least private money, and the gap is growing.</p>
+
+<div class="takeaways">
+  <h3>Inferences for the research direction</h3>
+  <ul>
+    <li><strong>The adaptation finance gap is the sharpest story.</strong> India's 3.3:1 mitigation tilt against its #2 global risk ranking is a quantifiable injustice worth a dedicated chapter.</li>
+    <li><strong>"Mobilisation follows bankability" is testable.</strong> The Brazil-vs-India inversion between public and private finance is a clean natural experiment in what de-risking can and cannot reach.</li>
+    <li><strong>Instruments encode market maturity.</strong> The guarantee-heavy mix in Pakistan/Bangladesh vs equity in Brazil is a measurable proxy — a possible index of "blended-finance readiness."</li>
+    <li><strong>China's exit</strong> from both public aid and (declining) private mobilisation makes it a useful control rather than a peer — worth reclassifying.</li>
+    <li><strong>Commitments ≠ disbursements, and markers overlap.</strong> Any headline number needs this caveat; a disbursement-based robustness check would strengthen the work.</li>
+    <li><strong>Per-capita and per-emissions normalisation</strong> is the obvious next cut — absolute totals flatter India and Brazil simply because they are large.</li>
+  </ul>
+</div>
+
+<p class="caveat">Two caveats carried throughout: all figures are <strong>commitments / amounts mobilised, not disbursements</strong> (actual money flowing can differ and lags), and the <strong>Rio markers overlap</strong> (a project can be tagged for several objectives, so markers cannot simply be summed). Indonesia appears in the public-finance data but not the private-mobilisation file.</p>
+
+<footer>
+  Working draft · summary of an exploratory analysis · not for citation.<br>
+  Data: OECD DAC Rio Markers (DSD_RIOMRKR) and CRS private mobilisation (DSD_MOB), constant prices. Vulnerability indices: Germanwatch CRI 2026, ND-GAIN 2023, WorldRiskIndex 2025.<br>
+  Figures are interactive — hover any bar or line for exact values.
+</footer>
+
+</div>
+
+<script>
+const fmtB = v => '$' + (v/1000).toFixed(v<1000?1:0) + 'B';
+const fmtM = v => '$' + Math.round(v).toLocaleString() + 'M';
+const baseOpts = {
+  responsive:true, maintainAspectRatio:false,
+  plugins:{ legend:{display:false},
+    tooltip:{ backgroundColor:'#1a2e28', padding:10, titleFont:{size:13}, bodyFont:{size:13},
+      callbacks:{ label:c=> (c.dataset.label? c.dataset.label+': ':'') + fmtM(c.parsed.y ?? c.parsed.x) } } },
+  scales:{ x:{grid:{display:false},ticks:{font:{size:12}}},
+           y:{grid:{color:'rgba(0,0,0,0.06)'},ticks:{font:{size:12},callback:fmtB}} }
+};
+const Gfont = {family:'system-ui, sans-serif'};
+Chart.defaults.font.family = 'system-ui, sans-serif';
+Chart.defaults.color = '#52615b';
+
+/* 1 — stacked env ODA */
+new Chart(c1,{type:'bar',
+ data:{labels:['India','Bangladesh','Indonesia','Viet Nam','Brazil','China','Pakistan'],
+  datasets:[
+   {label:'Climate mitigation',data:[33078,11485,9657,4185,4280,2779,2325],backgroundColor:'#ba7517'},
+   {label:'Climate adaptation',data:[10095,7787,7090,3332,2208,1554,2430],backgroundColor:'#0f6e56'},
+   {label:'Biodiversity',data:[3426,1841,2244,1127,2425,849,366],backgroundColor:'#7f77dd'},
+   {label:'Desertification',data:[897,125,441,64,120,137,278],backgroundColor:'#d85a30'}]},
+ options:{...baseOpts,scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(0,0,0,0.06)'},ticks:{callback:fmtB}}}}});
+
+/* 2 — mit:adapt ratio */
+new Chart(c2,{type:'bar',
+ data:{labels:['India','Brazil','China','Bangladesh','Indonesia','Viet Nam','Pakistan'],
+  datasets:[{label:'Mitigation : Adaptation',data:[3.28,1.94,1.79,1.47,1.36,1.26,0.96],
+   backgroundColor:['#ba7517','#0f6e56','#0f6e56','#0f6e56','#0f6e56','#0f6e56','#b4451f']}]},
+ options:{...baseOpts,
+  plugins:{...baseOpts.plugins,tooltip:{...baseOpts.plugins.tooltip,callbacks:{label:c=>c.parsed.y.toFixed(2)+'×'}}},
+  scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(0,0,0,0.06)'},ticks:{callback:v=>v+'×'},
+    afterBuildTicks:a=>{}, grid:{color:ctx=>ctx.tick.value===1?'#b4451f':'rgba(0,0,0,0.06)'}}}}});
+
+/* 3 — annual trend lines */
+const yrs=[2015,2016,2017,2018,2019,2020,2021,2022,2023,2024];
+const D={India:[1597,3524,3167,5535,2288,4188,3807,5846,8645,4576],
+ Bangladesh:[791,1701,651,1715,1873,2719,1357,2198,2270,1023],
+ Indonesia:[1696,527,1416,1599,793,2092,1228,1576,2362,2928],
+ 'Viet Nam':[977,1773,491,142,143,425,581,494,718,520],
+ Brazil:[715,328,520,448,247,797,415,567,615,1390],
+ China:[461,727,369,127,736,761,225,464,15,41],
+ Pakistan:[570,142,338,158,623,178,338,259,810,496]};
+const col={India:'#ba7517',Bangladesh:'#0f6e56',Indonesia:'#7f77dd','Viet Nam':'#d85a30',Brazil:'#378add',China:'#8a958f',Pakistan:'#b4451f'};
+new Chart(c3,{type:'line',
+ data:{labels:yrs,datasets:Object.keys(D).map(k=>({label:k,data:D[k],borderColor:col[k],backgroundColor:col[k],
+   borderWidth:k==='India'?3:1.6,tension:.3,pointRadius:0,pointHoverRadius:5}))},
+ options:{...baseOpts,interaction:{mode:'index',intersect:false},
+  plugins:{...baseOpts.plugins,tooltip:{...baseOpts.plugins.tooltip,callbacks:{label:c=>c.dataset.label+': '+fmtM(c.parsed.y)}}}}});
+/* custom legend for chart 3 */
+const leg3=document.getElementById('leg3');
+Object.keys(D).forEach(k=>{const s=document.createElement('span');
+ s.innerHTML='<span class="dot" style="background:'+col[k]+'"></span>'+k;leg3.appendChild(s);});
+
+/* 4 — multilateral totals */
+new Chart(c4,{type:'bar',
+ data:{labels:['Brazil','India','China','Viet Nam','Pakistan','Bangladesh'],
+  datasets:[{label:'Mobilised for climate',data:[17111,10221,4859,2743,747,553],
+   backgroundColor:['#7f77dd','#ba7517','#8a958f','#8a958f','#8a958f','#8a958f']}]},
+ options:baseOpts});
+
+/* 5 — by tool, stacked */
+new Chart(c5,{type:'bar',
+ data:{labels:['Brazil','India','China','Viet Nam','Pakistan','Bangladesh'],
+  datasets:[
+   {label:'Direct investment (SPVs)',data:[8137,3122,3293,1239,285,237],backgroundColor:'#1d9e75'},
+   {label:'Syndicated loans',data:[5499,361,1180,822,261,88],backgroundColor:'#7f77dd'},
+   {label:'Shares in CIVs',data:[606,3916,34,0,10,0],backgroundColor:'#ba7517'},
+   {label:'Guarantees',data:[1817,1885,53,668,174,198],backgroundColor:'#d85a30'},
+   {label:'Co-financing',data:[786,733,240,12,17,30],backgroundColor:'#378add'},
+   {label:'Credit lines',data:[265,204,59,0,0,0],backgroundColor:'#b4b2a9'}]},
+ options:{...baseOpts,scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(0,0,0,0.06)'},ticks:{callback:fmtB}}}}});
+
+/* 6 — % change diverging */
+new Chart(c6,{type:'bar',
+ data:{labels:['Brazil','Bangladesh','India','Viet Nam','China','Pakistan'],
+  datasets:[{label:'% change',data:[677,279,121,76,-30,-61],
+   backgroundColor:d=>d.raw>=0?'#0f6e56':'#b4451f'}]},
+ options:{...baseOpts,
+  plugins:{...baseOpts.plugins,tooltip:{...baseOpts.plugins.tooltip,callbacks:{label:c=>(c.parsed.y>0?'+':'')+c.parsed.y+'%'}}},
+  scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(0,0,0,0.06)'},ticks:{callback:v=>v+'%'}}}}});
+</script>
+</body>
+</html>
